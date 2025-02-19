@@ -1,0 +1,189 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Calculator</title>
+        <link rel="stylesheet" href="style.css">
+        <meta name="description" content="Calculator">
+        <meta name="author" content="Hafsa Imtiaz">
+        <meta name="keywords" content="Maths, Calculator">
+        <meta name="Viewport" content="width=content-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <div class="calculator">
+            <table class="calc">
+                <tr>
+                    <td colspan="6">
+                        <input type="text" class="res" id="display">
+                    </td>
+                </tr>
+                <tr>
+                    <td><button class="key" onclick="trigInverse()">INV</button></td>
+                    <td><button class="key" onclick="switch_RAD_DEG()">RAD</button></td>
+                    <td><button class="key operator" onclick="insertTrig('sin')">sin</button></td>
+                    <td><button class="key operator" onclick="insertTrig('cos')">cos</button></td>
+                    <td><button class="key operator" onclick="insertTrig('tan')">tan</button></td>
+                </tr>
+                <tr>
+                    <td><button class="key" onClick="insert('e', 'Math.E')">e</button></td>
+                    <td><button class="key" onClick="insert('(', '(')">&#40</button></td>
+                    <td><button class="key" onClick="insert(')', ')')">&#41</button></td>
+                    <td><button class="key operator" onClick="parenthesis_helper('^', '**')">x<sup>y</sup></button></td>
+                    <td><button class="key operator" onClick="insert('&#215', '*')">&#215</button></td>
+                </tr>
+                <tr>
+                    <td><button class="key" onclick="insert('&#960', 'Math.PI')">&#960</button></td> 
+                    <td><button class="key" onclick="insert('7', '7')">7</button></td>
+                    <td><button class="key" onclick="insert('8', '8')">8</button></td>
+                    <td><button class="key" onclick="insert('9', '9')">9</button></td>
+                    <td><button class="key operator" onClick="insert('+', '+')">+</button></td>
+                </tr>
+                <tr>
+                    <td><button class="key operator" onclick="parenthesis_helper('&#8730', 'Math.sqrt')">&#8730</button></td> 
+                    <td><button class="key" onclick="insert('4', '4')">4</button></td>
+                    <td><button class="key" onclick="insert('5', '5')">5</button></td>
+                    <td><button class="key" onclick="insert('6', '6')">6</button></td>
+                    <td><button class="key operator" onClick="insert('-', '-')">-</button></td>
+                </tr>
+                <tr>
+                    <td><button class="key operator" onclick="parenthesis_helper('ln', 'Math.log')">ln</button></td> 
+                    <td><button class="key" onclick="insert('1', '1')">1</button></td>
+                    <td><button class="key" onclick="insert('2', '2')">2</button></td>
+                    <td><button class="key" onclick="insert('3', '3')">3</button></td>
+                    <td><button class="key operator" onClick="insert('&#247', '/')">&#247</button> 
+                </tr>
+                <tr>
+                    <td><button class="key operator" onclick="parenthesis_helper('log', 'Math.log10')">log</button></td> 
+                    <td><button class="key" onclick="insert('0', '0')">0</button></td>
+                    <td><button class="key" onclick="insert('.', '.')">.</button></td>
+                    <td><button class="key" onclick="clearDisplay()">AC</button></td>
+                    <td><button class="key operator equal" onclick="calculate()">=</button></td>
+                </tr>
+            </table>
+        </div>
+
+        <script>
+            var inverse = false;
+            var isRadian = true;
+            var isTrigfunc = false;  // trig val
+            var ang_value = ""; // trig func input ke liye
+
+            var openParenthesisCount = 0;  // parenthesis count
+            let display = document.getElementById("display");
+            var res = "";
+
+            function insert(disp_value, math_val) { //naan bhook
+                if (display.value === "Error" || display.value === "NaN") {
+                    clearDisplay();
+                }
+
+                if (disp_value === '(') {
+                    openParenthesisCount++;
+                } 
+                else if (disp_value === ')' && openParenthesisCount > 0) {
+                    openParenthesisCount--;
+                    if(isTrigfunc){ // handles degree angle wala input
+                        let angle = parseFloat(ang_value) || 0;
+                        if (!isRadian) {
+                            angle = angle * Math.PI / 180; 
+                        }
+                        math_val = angle.toString() + ")";
+                        ang_value = "";
+                        isTrigfunc = false;
+                    }
+                } 
+                else if (disp_value === ')' && openParenthesisCount <= 0) {
+                    return;
+                }
+                
+                display.value += disp_value;
+                if(!isTrigfunc)
+                    res += math_val;
+                else {
+                    ang_value += math_val;
+                }
+            }
+
+            function clearDisplay() {
+                display.value = "";
+                res = "";
+                ang_value = "";
+                isTrigfunc = false;
+                openParenthesisCount = 0; 
+            }
+
+            function calculate() {
+                try {
+                    // iske bighair wont work eventho ive tried to handle it
+                    let result = res.replace(/√/g, 'Math.sqrt')
+                                    .replace(/ln/g, 'Math.log')
+                                    .replace(/sin/g, 'Math.sin')
+                                    .replace(/cos/g, 'Math.cos')
+                                    .replace(/tan/g, 'Math.tan')
+                                    .replace(/asin/g, 'Math.asin')
+                                    .replace(/acos/g, 'Math.acos')
+                                    .replace(/atan/g, 'Math.atan');
+
+                    // Evaluate the expression safely
+                    display.value = new Function('return ' + result)();
+                    if(display.value.includes("e-16") || display.value.includes("e-17") || display.value.includes("e-15")) {
+                        display.value = "0";
+                    }
+                    res = display.value;
+                    isTrigfunc = false; 
+                    openParenthesisCount = 0;  
+                } catch {
+                    display.value = "Error";
+                    res = "";
+                }
+            }
+
+            function trigInverse() {
+                inverse = !inverse;
+                document.querySelectorAll("button").forEach(button => {
+                    if (button.innerText === "sin" || button.innerText === "sin⁻¹") 
+                        button.innerText = inverse ? "sin⁻¹" : "sin";
+                    if (button.innerText === "cos" || button.innerText === "cos⁻¹") 
+                        button.innerText = inverse ? "cos⁻¹" : "cos";
+                    if (button.innerText === "tan" || button.innerText === "tan⁻¹") 
+                        button.innerText = inverse ? "tan⁻¹" : "tan";
+                });
+            }
+
+            function switch_RAD_DEG() {
+                isRadian = !isRadian;
+                document.querySelector("[onclick='switch_RAD_DEG()']").innerText = isRadian ? "RAD" : "DEG";
+            }
+
+            // ye un sab ke liye jahan ( brackets ) chahiye
+            function parenthesis_helper(disp_func, math_func){
+                display.value += disp_func + "(";
+                res += math_func + "(";
+                openParenthesisCount++;
+            }
+
+            function insertTrig(func) {
+                var disp = func;
+                if (inverse){
+                    if(func === "sin"){
+                        disp = "sin⁻¹";
+                        func = "asin";
+                    }
+                    else if(func === "cos"){
+                        disp = "cos⁻¹";
+                        func = "acos";
+                    }
+                    else if(func === "tan"){
+                        disp = "tan⁻¹";
+                        func = "atan";
+                    }
+                }
+                isTrigfunc = true; 
+                display.value += disp + "(";  
+                res += func + "("; 
+                openParenthesisCount ++; 
+            }
+        </script>
+
+    </body>
+</html>
