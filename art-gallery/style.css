@@ -1,0 +1,206 @@
+header {
+    padding: 10px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: large;
+}
+
+header * {
+    text-decoration: none;
+    color: black;
+}
+
+header * :hover {
+    color:rgb(46, 140, 166);
+}
+
+.logo {
+    font-size: larger;
+}
+
+nav * {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+footer {
+    position: static;
+    text-align: center;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+
+.banner {
+    background-color: rgb(252, 247, 230);
+    padding: 50px;
+    border-radius: 10px;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+
+.banner-image {
+    text-align: right;
+    margin-right: 50px;
+    position: relative;
+}
+
+.banner-descrip {
+    margin-left: 5%;
+    text-align: left;
+    z-index: 1;
+    position: absolute;
+    width: 50%;
+}
+
+.banner-descrip h2 {
+    font-size: 250%;
+}
+
+.banner-descrip h1 {
+    font-size: 250%;
+}
+
+.banner-descrip p {
+    width: 70%;
+}
+
+.banner-descrip * {
+    font-size: 170%;
+}
+
+.banner-image img {
+    width: 55%;
+    height: auto;
+    box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.5);
+}
+
+.categories {
+    background-color: rgb(255, 252, 247);
+    border-radius: 10px;
+    margin: 5px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.categories h1 {
+    font-size: 200%;
+    text-align: center;
+}
+
+.artists {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.ArtBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.5);
+    background-color: white;
+}
+
+.ArtImage {
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ArtImage img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover; 
+}
+
+.descrip {
+    width: 90%;
+    text-align: center;
+    padding: 10px;
+}
+
+@media screen and (max-width: 1024px) {
+    .artists {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+
+    .ArtBox {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .ArtImage {
+        width: 250px;
+        height: 250px;
+    }
+
+    .descrip h2 {
+        font-size: 1.5em;
+    }
+
+    .descrip p {
+        font-size: 1em;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .artists {
+        grid-template-columns: 1fr; 
+        gap: 15px;
+    }
+
+    .ArtBox {
+        width: 100%;
+        padding: 15px;
+        margin: 5px;
+    }
+
+    .ArtImage {
+        width: 220px;
+        height: 220px;
+    }
+
+    .descrip h2 {
+        font-size: 1.3em;
+    }
+
+    .descrip p {
+        font-size: 0.9em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .ArtBox {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .ArtImage {
+        width: 180px;
+        height: 180px;
+    }
+
+    .descrip h2 {
+        font-size: 1.2em;
+    }
+
+    .descrip p {
+        font-size: 0.85em;
+    }
+}
